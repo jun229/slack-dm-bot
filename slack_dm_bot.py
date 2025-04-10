@@ -8,8 +8,8 @@ import time
 load_dotenv(dotenv_path=".env.local")
 
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
-CHANNEL_ID = os.getenv("CHANNEL_ID")
-MESSAGE = "Hey! Please take 1 min to fill out this form: [your-form-link]"
+CHANNEL_IDS = (os.getenv("CHANNEL_ID")).split(",")
+MESSAGE = os.getenv("MESSAGE")
 
 client = WebClient(token=SLACK_BOT_TOKEN)
 
@@ -42,8 +42,11 @@ def send_dm(user_id, message):
 
 if __name__ == "__main__":
     all_users = get_user_ids()
-    channel_users = get_channel_members(CHANNEL_ID)
+    channel_users = []
+    for CHANNEL_ID in CHANNEL_IDS:
+        channel_users += get_channel_members(CHANNEL_ID)
     users = [user_id for user_id in all_users if user_id in channel_users]
+    users = set(users)
     for user_id in users:
         send_dm(user_id, MESSAGE)
         time.sleep(1.5)
