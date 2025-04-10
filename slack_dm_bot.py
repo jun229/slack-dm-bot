@@ -24,7 +24,7 @@ def get_user_ids():
         print(f"Error fetching users: {e}")
     return user_ids
 
-def get_channel_members(CHANNEL_ID): #Update channel in your .env everytime you want to switch channels
+def get_channel_members(CHANNEL_ID):
     try:
         result = client.conversations_members(channel=CHANNEL_ID)
         return result["members"]
